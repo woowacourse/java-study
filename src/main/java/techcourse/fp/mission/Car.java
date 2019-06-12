@@ -1,4 +1,4 @@
-package com.java.fp.mission;
+package techcourse.fp.mission;
 
 import java.util.Objects;
 
