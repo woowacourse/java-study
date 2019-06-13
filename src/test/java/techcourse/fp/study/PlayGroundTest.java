@@ -98,6 +98,31 @@ class PlayGroundTest {
     }
 
     @Test
+    public void 변경_불가능한_값을_사용하는지() {
+        List<Long> aList = new ArrayList<>();
+        Stream<Long> parallelStream = aList.parallelStream();
+
+        assertTrue(parallelStream.isParallel());
+    }
+
+    @Test
+    public void 함수를_인자로_받는_예제() {
+        println("Area is ", 2, 3, (message, length, width) -> message + (length * width));
+    }
+
+    @Test
+    public void 함수를_반환_값으로_활용하는_예제() {
+        Function<String, Integer> toInt = value -> Integer.parseInt(value);
+        final Integer number = toInt.apply("100");
+        //toInt(100);
+        assertThat(number).isEqualTo(100);
+    }
+
+    /**
+     * Functional Interface를 학습하기 위한 예제 코드
+     */
+
+    @Test
     public void Function_예제() {
         println("Area is ", 2, 3, (message, length, width) -> message + (length * width));
     }
