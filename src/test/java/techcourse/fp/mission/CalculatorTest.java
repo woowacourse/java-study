@@ -9,7 +9,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CalculatorTest {
     private List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
-    ;
 
     @Test
     public void sumAll() {
