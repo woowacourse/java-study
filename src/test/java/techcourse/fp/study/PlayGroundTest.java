@@ -2,21 +2,27 @@ package techcourse.fp.study;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.sun.deploy.trace.Trace.print;
 import static java.util.stream.Collectors.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PlayGroundTest {
+    public static final String COLON_DELIMITER = " : ";
+
     private List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
 
     @Test
@@ -124,7 +130,8 @@ class PlayGroundTest {
 
     @Test
     public void Function_예제() {
-        println("Area is ", 2, 3, (message, length, width) -> message + (length * width));
+        println("Area is ", 2, 3,
+                (message, length, width) -> message + (length * width));
     }
 
     @FunctionalInterface
@@ -156,6 +163,49 @@ class PlayGroundTest {
     }
 
     @Test
+    public void Stream을_사용하지_않은_경우() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+        int expected = 8;
+
+        Integer notUsingStreamResult = null;
+        for (final Integer number : numbers) {
+            if (number > 2 && number <= 5) {
+                final Integer newNumber = number * 2;
+                if (newNumber > 7) {
+                    notUsingStreamResult = newNumber;
+                    break;
+                }
+            }
+        }
+        assertThat(notUsingStreamResult).isEqualTo(expected);
+    }
+
+    @Test
+    public void Stream을_사용한_경우() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+        int expected = 8;
+
+        Integer usingStreamResult = numbers.stream()
+                .filter(number -> number > 2)
+                .filter(number -> number <= 5)
+                .map(number -> number * 2)
+                .filter(number -> number > 7)
+                .findFirst().get();
+
+        assertThat(usingStreamResult).isEqualTo(expected);
+    }
+
+    @Test
+    public void 타입추론은_언제_이루어질까() {
+        Stream.of(1, 2, 3, 4, 5)
+                .filter(number -> number > 3)
+                .map(number -> number * 2)
+                .map(i -> "#" + i)
+                .findFirst()
+                .get();
+    }
+
+    @Test
     public void Eager_Evaluation_테스트() {
         List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
         List<String> result = new ArrayList<>();
@@ -182,7 +232,7 @@ class PlayGroundTest {
 
     @Test
     public void Lazy_Evaluation_테스트() {
-        Stream stream = Stream.of(1, 2, 3, 4, 5)
+        Stream stream = Stream.of(1, 2, 3, 4, 5).parallel()
                 .peek(i -> log("starting", i))
                 .filter(i -> {
                     log("filtering", i);
@@ -211,5 +261,19 @@ class PlayGroundTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void 재사용_스트림_문제() {
+        IntStream stream = IntStream.of(1, 2);
+        stream.forEach(System.out::println);
+
+        stream.forEach(System.out::println);
+    }
+
+    @Test
+    public void 무한_스트림_문제() {
+        IntStream.iterate(0, i -> i + 1)
+                .forEach(System.out::println);
     }
 }
