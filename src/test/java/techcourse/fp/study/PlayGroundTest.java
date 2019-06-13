@@ -20,6 +20,74 @@ class PlayGroundTest {
     private List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
 
     @Test
+    public void For문을_활용하여_콜론을_추가하는_문자열_작성() {
+        final int size = numbers.size();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < size; i++) {
+            stringBuilder.append(numbers.get(i));
+
+            if (i != size - 1) {
+                stringBuilder.append(" : ");
+            }
+        }
+
+        System.out.println(stringBuilder.toString());
+    }
+
+    @Test
+    public void ForEach를_활용하여_콜론을_추가하는_문자열_작성() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (Integer number : numbers) {
+            stringBuilder.append(number).append(" : ");
+        }
+
+        if (stringBuilder.length() > 0) {
+            stringBuilder.delete(stringBuilder.length() - 3, stringBuilder.length());
+        }
+
+        System.out.println(stringBuilder.toString());
+    }
+
+    @Test
+    public void Stream을_활용하여_콜론을_추가하는_문자열_작성() {
+        final String result = numbers.stream()
+                .map(String::valueOf)
+                .collect(joining(COLON_DELIMITER));
+
+        System.out.println(result);
+    }
+    Path path ;
+
+    @Test
+    public void 이렇게까지_Stream을_써야할까() throws IOException {
+        int minGroupSize = 0;
+        Stream<String> words = Files.lines(path);
+
+        words.collect(
+                groupingBy(word -> word.chars().sorted()
+                        .collect(StringBuilder::new,
+                                (sb, c) -> sb.append((char) c),
+                                StringBuilder::append).toString()))
+                .values().stream()
+                .filter(group -> group.size() >= minGroupSize)
+                .map(group -> group.size() + ": " + group)
+                .forEach(System.out::println);
+    }
+
+    @Test
+    public void ThreadPoolExecutor_실행_테스트() {
+        method("test");
+    }
+
+    static ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+    public void method(final String message) {
+        executorService.submit(() -> print(message));
+    }
+
+    @Test
     public void printAllOld() {
         PlayGround.printAllOld(numbers);
     }
