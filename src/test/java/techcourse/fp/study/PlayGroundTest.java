@@ -1,5 +1,6 @@
 package techcourse.fp.study;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,7 +16,6 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.sun.deploy.trace.Trace.print;
 import static java.util.stream.Collectors.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -84,14 +84,10 @@ class PlayGroundTest {
 
     @Test
     public void ThreadPoolExecutor_실행_테스트() {
-        method("test");
+        executorService.submit(() -> System.out.println("test"));
     }
 
     static ExecutorService executorService = Executors.newFixedThreadPool(10);
-
-    public void method(final String message) {
-        executorService.submit(() -> print(message));
-    }
 
     @Test
     public void printAllOld() {
@@ -272,6 +268,7 @@ class PlayGroundTest {
     }
 
     @Test
+    @Disabled
     public void 무한_스트림_문제() {
         IntStream.iterate(0, i -> i + 1)
                 .forEach(System.out::println);
