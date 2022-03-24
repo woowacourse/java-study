@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class PlayGround {
+
     public static void printAllOld(List<Integer> numbers) {
         System.out.println("printAllOld");
 

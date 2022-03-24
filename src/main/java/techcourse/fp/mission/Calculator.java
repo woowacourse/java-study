@@ -3,6 +3,7 @@ package techcourse.fp.mission;
 import java.util.List;
 
 public class Calculator {
+
     public static int sumAll(List<Integer> numbers) {
         int total = 0;
         for (int number : numbers) {

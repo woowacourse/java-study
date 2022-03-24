@@ -3,6 +3,7 @@ package techcourse.fp.mission;
 import java.util.Objects;
 
 public class Car {
+
     private final String name;
     private final int position;
 
